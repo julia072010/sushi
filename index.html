@@ -258,42 +258,63 @@ d{display:flex; flex-direction:column; gap:20px; margin-top:20px;}
 </div>
 </section>
 <script>
-let cart=[];
-function showPage(page){
-  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+let cart = [];
+
+function showPage(page) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
   document.getElementById(page).classList.add('active');
 }
-function addToCart(item,price){
-  cart.push({item,price});
+
+function addToCart(item, price) {
+  cart.push({ item, price });
   renderCart();
 }
-function renderCart(){
-  const container=document.getElementById('cart-items');
-  container.innerHTML='';
-  let total=0;
-  cart.forEach(c=>{
-    total+=c.price;
-    const div=document.createElement('div');
-    div.textContent=`${c.item} - $${c.price}`;
+
+function renderCart() {
+  const container = document.getElementById('cart-items');
+  container.innerHTML = '';
+  let total = 0;
+  cart.forEach(c => {
+    total += c.price;
+    const div = document.createElement('div');
+    div.textContent = `${c.item} - $${c.price}`;
     container.appendChild(div);
   });
-  document.getElementById('cart-total').textContent=total;
+  document.getElementById('cart-total').textContent = total;
 }
 
-function checkout(){
-  if(cart.length===0){alert("Your cart is empty!"); return;}
+function checkout() {
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+  
   let name = prompt("Enter your name:");
   let content = `Customer: ${name}\n\nItems:\n`;
-  let total=0;
-  cart.forEach((c,idx)=>{
-    content+=`${idx+1}. ${c.item} - $${c.price}\n`;
-    total+=c.price;
+  let total = 0;
+
+  cart.forEach((c, idx) => {
+    content += `${idx + 1}. ${c.item} - $${c.price}\n`;
+    total += c.price;
   });
-  content+=`\nTotal: $${total}\n\nThank you for your order!`;
-  document.getElementById('checkoutContent').textContent=content;
-  document.getElementById('checkoutModal').style.display='flex';
+
+  content += `\nTotal: $${total}\n\nThank you for your order!`;
+
+  // Display the checkout content
+  document.getElementById('checkoutContent').textContent = content;
+
+  // Show the checkout modal
+  document.getElementById('checkoutModal').style.display = 'flex';
+
+  // Empty the cart after checkout
+  cart = [];
+  renderCart();  // Re-render the cart to show it as empty
 }
-function closeCheckout(){document.getElementById('checkoutModal').style.display='none';}
+
+function closeCheckout() {
+  document.getElementById('checkoutModal').style.display = 'none';
+}
+
 
 document.getElementById('giftForm').addEventListener('submit',function(e){
   e.preventDefault();
